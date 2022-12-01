@@ -1,0 +1,32 @@
+& when (@media-common = true) {
+    .checkout-index-index {
+        #checkout {
+            .opc-wrapper {
+                padding: @indent__m;
+                #checkoutSteps {
+                    li {
+                        .step-title {
+                            padding: @indent__m;
+                            background: @color-white-smoke;
+                            border-bottom: 0px;
+                        }
+                    }
+                    #customer-email-fieldset,
+                    #co-shipping-form,
+                    #shipping-new-address-form,
+                    #billing,
+                    #opc-shipping_method,
+                    #payment {
+                        .field {
+                            > .label,
+                            > .control {
+                                text-align: left;
+                                float: unset;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

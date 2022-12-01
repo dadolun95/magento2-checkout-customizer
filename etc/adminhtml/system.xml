@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Magento 2
+ * @package     Dadolun_Checkout
+ * @copyright   Copyright (c) 2022 Dadolun (https://github.com/dadolun95)
+ */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="dadolun" translate="label" sortOrder="10">
+            <label>Dadolun</label>
+        </tab>
+        <section id="dadolun_checkout" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <resource>Dadolun_Checkout::checkout</resource>
+            <tab>dadolun</tab>
+            <group id="general" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Checkout Customizer</label>
+                <field id="enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Checkout Customizer</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="page_layout" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Checkout page layout</label>
+                    <source_model>Dadolun\Checkout\Model\Config\Source\PageLayout</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field>
+                <field id="layout" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Checkout layout</label>
+                    <source_model>Dadolun\Checkout\Model\Config\Source\Layout</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field>
+                <field id="move_billing_outside_payment" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Move billing address form directly under shipping address form.</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                        <field id="checkout/options/display_billing_address_on">1</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
