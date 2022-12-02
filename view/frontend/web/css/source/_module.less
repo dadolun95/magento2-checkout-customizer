@@ -28,5 +28,29 @@
                 }
             }
         }
+        &.onestep-checkout {
+            #checkout {
+                #checkoutSteps {
+                    display: flex;
+                    flex-wrap: wrap;
+                    flex-direction: column;
+                    #shipping {
+                        order: 1;
+                    }
+                    #opc-shipping_method {
+                        order: 2;
+                        .actions-toolbar {
+                            display: none;
+                        }
+                    }
+                    #billing {
+                        order: 3;
+                    }
+                    #payment {
+                        order: 4;
+                    }
+                }
+            }
+        }
     }
 }
