@@ -1,0 +1,17 @@
+<!--
+/**
+ * @category    Magento 2
+ * @package     Dadolun_Checkout
+ * @copyright   Copyright (c) 2022 Dadolun (https://github.com/dadolun95)
+ */
+-->
+<li id="billing" role="presentation" class="checkout-billing-address">
+    <div class="step-title" translate="'Billing Address'" data-role="title" />
+    <div id="checkout-step-billing"
+         class="step-content"
+         data-role="content">
+        <!-- ko foreach: getRegion('billingAddress') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- /ko -->
+    </div>
+</li>

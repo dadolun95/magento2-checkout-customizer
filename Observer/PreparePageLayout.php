@@ -44,22 +44,25 @@ class PreparePageLayout implements \Magento\Framework\Event\ObserverInterface
              * @var Layout $layout
              */
             $layout = $observer->getLayout();
-            if ($layout->getUpdate()->getPageLayout() === "checkout_index_index") {
+            if ($observer->getFullActionName() !== "checkout_index_index") {
                 return;
             }
 
             switch ($this->helper->getPageLayout()) {
                 case 'empty':
-                    $handle = 'checkout_layout_empty';
+                    $layout->getUpdate()->addHandle('checkout_layout_empty');
                     break;
                 case 'minimal':
-                    $handle = 'checkout_layout_minimal';
+                    $layout->getUpdate()->addHandle('checkout_layout_minimal');
                     break;
                 default:
-                    return;
+                    break;
             }
 
-            $layout->getUpdate()->addHandle($handle);
+            if ($this->helper->getLayout() === "onestep") {
+                $checkoutLayoutHandle = 'checkout_layout_onepage';
+                $layout->getUpdate()->addHandle($checkoutLayoutHandle);
+            }
         }
     }
 }

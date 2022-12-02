@@ -15,7 +15,7 @@ define([
 
     watcher(
         'billing-address-form',
-        'checkmo|company',
+        'company',
         {
             value: 'Test',
             match: function(component) {

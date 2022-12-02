@@ -5,12 +5,6 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            'Magento_Checkout/template/shipping.html':
-                'Dadolun_Checkout/template/shipping.html',
-        }
-    },
     shim: {
         'Magento_Checkout/js/view/shipping': [
             'Dadolun_Checkout/js/shipping-customizer'

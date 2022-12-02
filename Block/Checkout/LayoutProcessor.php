@@ -12,6 +12,7 @@ namespace Dadolun\Checkout\Block\Checkout;
 use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Pragmatic\JsLayoutParser\Api\ComponentInterface;
+use Pragmatic\JsLayoutParser\Model\Component;
 use Pragmatic\JsLayoutParser\Model\ComponentFactory;
 use Pragmatic\JsLayoutParser\Model\JsLayoutParser;
 use Dadolun\Checkout\Helper\Config;
@@ -74,27 +75,10 @@ class LayoutProcessor implements LayoutProcessorInterface
             /** @var ComponentInterface $checkout */
             $checkout = $this->jsLayoutParser->parse($jsLayout, 'checkout');
 
-            if (!$this->checkoutDataHelper->isDisplayBillingOnPaymentMethodAvailable()) {
-                if ($this->helper->moveBillingOutsidePayment()) {
-                    if ($checkout->hasNestedChild('steps.billing-step.payment.afterMethods.billing-address-form')) {
-                        $checkout->getNestedChild('steps.billing-step.payment.afterMethods.billing-address-form')->setDisplayArea('billing-address-form');
-                        $checkout->moveNestedChild('steps.billing-step.payment.afterMethods.billing-address-form', 'steps.shipping-step.shippingAddress');
-                        $checkout->getChild('steps')->setConfig([
-                            'billingFormPath' => 'checkout.steps.shipping-step.shippingAddress.billing-address-form.form-fields.'
-                        ]);
-                    }
-                } else {
-                    $checkout->getChild('steps')->setConfig([
-                        'billingFormPath' => 'checkout.steps.billing-step.payment.afterMethods.billing-address-form.form-fields.'
-                    ]);
-                }
-            } else {
-                $checkout->getChild('steps')->setConfig([
-                    'billingFormPath' => 'checkout.steps.billing-step.payment.payments-list'
-                ]);
-            }
+            $billingAddressFormContainer = $this->createBillingAddressContainer($checkout);
 
-            switch ($this->helper->getLayout()) {
+            $layout = $this->helper->getLayout();
+            switch ($layout) {
                 case 'onestep':
                     $checkout = $this->useOneStep($checkout);
                     break;
@@ -110,10 +94,75 @@ class LayoutProcessor implements LayoutProcessorInterface
                 default:
                     break;
             }
+
+            $this->updateBillingAddress($checkout, $billingAddressFormContainer, $layout);
+
             $jsLayout['components']['checkout'] = $checkout->asArray();
         }
 
         return $jsLayout;
+    }
+
+    /**
+     * @param $checkout
+     * @return Component
+     */
+    private function createBillingAddressContainer($checkout) {
+        $checkout->getNestedChild('steps.billing-step.payment.afterMethods.billing-address-form')->setConfig([
+            'displayArea' => 'billingAddress'
+        ]);
+        $billingAddressFormContainerData = [
+            'component' => 'uiComponent',
+            'config' => [
+                'template' => 'Dadolun_Checkout/billing',
+                'options' => [],
+                'id' => 'billing-address-form-container'
+            ],
+            'dataScope' => '',
+            'label' => 'Billing Address Form Container',
+            'provider' => 'checkoutProvider',
+            'visible' => true,
+            'validation' => [],
+            'sortOrder' => 250,
+            'id' => 'billing-address-form-container'
+        ];
+        return $this->componentFactory->create(['componentName' => 'billing-address-form-container', 'data' => $billingAddressFormContainerData]);
+    }
+
+    /**
+     * @param $checkout
+     * @param $billingAddressFormContainer
+     * @param $layout
+     */
+    private function updateBillingAddress($checkout, $billingAddressFormContainer, $layout) {
+        if (!$this->checkoutDataHelper->isDisplayBillingOnPaymentMethodAvailable()) {
+            if ($this->helper->moveBillingOutsidePayment()) {
+                if ($layout === "onestep") {
+                    $checkout->getNestedChild('steps.billing-step')->addChild($billingAddressFormContainer);
+                    $checkout->moveNestedChild('steps.billing-step.payment.afterMethods.billing-address-form', 'steps.billing-step.billing-address-form-container');
+                    $checkout->getChild('steps')->setConfig([
+                        'billingFormPath' => 'checkout.steps.billing-step.billing-address-form-container.billing-address-form.form-fields.'
+                    ]);
+                } else {
+                    $billingAddressFormContainer->setConfig([
+                        'displayArea' => 'beforeMethods'
+                    ]);
+                    $checkout->getNestedChild('steps.billing-step.payment')->addChild($billingAddressFormContainer);
+                    $checkout->moveNestedChild('steps.billing-step.payment.afterMethods.billing-address-form', 'steps.billing-step.payment.billing-address-form-container');
+                    $checkout->getChild('steps')->setConfig([
+                        'billingFormPath' => 'checkout.steps.billing-step.payment.billing-address-form-container.billing-address-form.form-fields.'
+                    ]);
+                }
+            } else {
+                $checkout->getChild('steps')->setConfig([
+                    'billingFormPath' => 'checkout.steps.billing-step.payment.afterMethods.billing-address-form.form-fields.'
+                ]);
+            }
+        } else {
+            $checkout->getChild('steps')->setConfig([
+                'billingFormPath' => 'checkout.steps.billing-step.payment.payments-list'
+            ]);
+        }
     }
 
     /**
@@ -138,6 +187,12 @@ class LayoutProcessor implements LayoutProcessorInterface
             $shippingConfig = $shipping->getConfig();
             $shippingConfig['showNextStepCta'] = false;
             $shipping->setConfig($shippingConfig);
+        }
+        if (
+            $checkout->hasChild('sidebar') &&
+            $checkout->hasNestedChild('sidebar.shipping-information')
+        ) {
+            $checkout->removeNestedChild('sidebar.shipping-information');
         }
         return $checkout;
     }
