@@ -80,7 +80,10 @@ class LayoutProcessor implements LayoutProcessorInterface
             $layout = $this->helper->getLayout();
             switch ($layout) {
                 case 'onestep':
-                    $checkout = $this->useOneStep($checkout);
+                    $this->useOneStep($checkout);
+                    if ($this->helper->moveSidebarInsideCheckout()) {
+                        $this->updateSidebar($checkout);
+                    }
                     break;
                 case 'twosteps':
                     $checkout->getChild('steps')->setConfig([
@@ -105,9 +108,37 @@ class LayoutProcessor implements LayoutProcessorInterface
 
     /**
      * @param $checkout
+     */
+    public function updateSidebar($checkout) {
+        $summaryContainerData = [
+            'component' => 'uiComponent',
+            'config' => [
+                'template' => 'Dadolun_Checkout/summary',
+                'options' => [],
+                'id' => 'summary-container'
+            ],
+            'dataScope' => '',
+            'label' => 'Summary Container',
+            'provider' => 'checkoutProvider',
+            'visible' => true,
+            'validation' => [],
+            'sortOrder' => 100,
+            'id' => 'summary-container'
+        ];
+        $summaryContainer = $this->componentFactory->create(['componentName' => 'summary-container', 'data' => $summaryContainerData]);
+        $checkout->getNestedChild('steps')->addChild($summaryContainer);
+        $checkout->getNestedChild('sidebar.summary')->setConfig([
+            'displayArea' => 'paymentSummary'
+        ]);
+        $checkout->moveNestedChild('sidebar.summary', 'steps.summary-container');
+        $checkout->getChild('sidebar')->remove();
+    }
+
+    /**
+     * @param $checkout
      * @return Component
      */
-    private function createBillingAddressContainer($checkout) {
+    public function createBillingAddressContainer($checkout) {
         $checkout->getNestedChild('steps.billing-step.payment.afterMethods.billing-address-form')->setConfig([
             'displayArea' => 'billingAddress'
         ]);
@@ -123,7 +154,7 @@ class LayoutProcessor implements LayoutProcessorInterface
             'provider' => 'checkoutProvider',
             'visible' => true,
             'validation' => [],
-            'sortOrder' => 250,
+            'sortOrder' => 10,
             'id' => 'billing-address-form-container'
         ];
         return $this->componentFactory->create(['componentName' => 'billing-address-form-container', 'data' => $billingAddressFormContainerData]);
@@ -134,7 +165,7 @@ class LayoutProcessor implements LayoutProcessorInterface
      * @param $billingAddressFormContainer
      * @param $layout
      */
-    private function updateBillingAddress($checkout, $billingAddressFormContainer, $layout) {
+    public function updateBillingAddress($checkout, $billingAddressFormContainer, $layout) {
         if (!$this->checkoutDataHelper->isDisplayBillingOnPaymentMethodAvailable()) {
             if ($this->helper->moveBillingOutsidePayment()) {
                 if ($layout === "onestep") {
@@ -170,7 +201,7 @@ class LayoutProcessor implements LayoutProcessorInterface
      * @return mixed
      * @throws LocalizedException
      */
-    private function useOneStep(ComponentInterface $checkout)
+    public function useOneStep(ComponentInterface $checkout)
     {
         if ($checkout->hasChild('progressBar')) {
             $checkout->removeChild('progressBar');
@@ -194,6 +225,5 @@ class LayoutProcessor implements LayoutProcessorInterface
         ) {
             $checkout->removeNestedChild('sidebar.shipping-information');
         }
-        return $checkout;
     }
 }

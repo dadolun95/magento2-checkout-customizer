@@ -1,0 +1,16 @@
+<!--
+/**
+ * @category    Magento 2
+ * @package     Dadolun_Checkout
+ * @copyright   Copyright (c) 2022 Dadolun (https://github.com/dadolun95)
+ */
+-->
+<li id="summary" role="presentation" class="checkout-summary">
+    <div id="checkout-step-billing"
+         class="step-content"
+         data-role="content">
+        <!-- ko foreach: getRegion('paymentSummary') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- /ko -->
+    </div>
+</li>

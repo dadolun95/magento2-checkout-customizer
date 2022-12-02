@@ -28,12 +28,17 @@
                 }
             }
         }
+        &.full-checkout {
+            #checkout {
+                .opc-wrapper {
+                    width: 100%;
+                }
+            }
+        }
         &.onestep-checkout {
             #checkout {
                 #checkoutSteps {
-                    display: flex;
-                    flex-wrap: wrap;
-                    flex-direction: column;
+                    display: grid;
                     #shipping {
                         order: 1;
                     }
@@ -46,8 +51,20 @@
                     #billing {
                         order: 3;
                     }
-                    #payment {
+                    #summary {
                         order: 4;
+                        .opc-block-summary {
+                            padding: 0px;
+                            background: transparent;
+                            > .title {
+                                background: @color-white-smoke;
+                                border-bottom: 0px;
+                                padding: @indent__m;
+                            }
+                        }
+                    }
+                    #payment {
+                        order: 5;
                     }
                 }
             }

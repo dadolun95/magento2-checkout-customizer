@@ -62,6 +62,10 @@ class PreparePageLayout implements \Magento\Framework\Event\ObserverInterface
             if ($this->helper->getLayout() === "onestep") {
                 $checkoutLayoutHandle = 'checkout_layout_onepage';
                 $layout->getUpdate()->addHandle($checkoutLayoutHandle);
+                if ($this->helper->moveSidebarInsideCheckout()) {
+                    $checkoutLayoutFullHandle = 'checkout_layout_onepage_full';
+                    $layout->getUpdate()->addHandle($checkoutLayoutFullHandle);
+                }
             }
         }
     }

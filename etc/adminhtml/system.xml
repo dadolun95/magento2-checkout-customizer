@@ -45,12 +45,13 @@
                         <field id="enable">1</field>
                     </depends>
                 </field>
-                <field id="move_agreements_outside_payment" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Move checkout agreements outside payment list</label>
-                    <comment>In order to enable this functionality, you must set "Stores > Configuration > Sales > Checkout > Checkout Options > Enable Terms and Conditions" as "Yes" and create applicable agreements on "Stores > Settings > Terms and Conditions".</comment>
+                <field id="move_sidebar_inside_checkout" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Move sidebar summary inside checkout main content</label>
+                    <comment>Enabling this function you'll see a "summary" section inside checkout main content instead of sidebar summary.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <depends>
                         <field id="enable">1</field>
+                        <field id="layout">onestep</field>
                     </depends>
                 </field>
             </group>

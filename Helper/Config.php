@@ -47,6 +47,11 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
      */
     const MOVEBILLING_FIELD_PATH = '/move_billing_outside_payment';
 
+    /**
+     * @var string
+     */
+    const MOVESIDEBAR_FIELD_PATH = '/move_sidebar_inside_checkout';
+
 
     /**
      * @return string
@@ -77,6 +82,13 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function moveBillingOutsidePayment() {
         return $this->getConfigValue(self::CONFIG_PATH_GENERAL . self::MOVEBILLING_FIELD_PATH);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function moveSidebarInsideCheckout() {
+        return $this->getConfigValue(self::CONFIG_PATH_GENERAL . self::MOVESIDEBAR_FIELD_PATH);
     }
 
     /**
