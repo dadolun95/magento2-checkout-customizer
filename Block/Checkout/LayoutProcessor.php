@@ -78,8 +78,10 @@ class LayoutProcessor implements LayoutProcessorInterface
             $checkout->setConfig([
                 "checkoutCustomizerActive" => true
             ]);
-            $billingAddressFormContainer = $this->createBillingAddressContainer($checkout);
 
+            /**
+             * @var string $layout
+             */
             $layout = $this->helper->getLayout();
             switch ($layout) {
                 case 'onestep_onecolumn':
@@ -102,7 +104,7 @@ class LayoutProcessor implements LayoutProcessorInterface
                     break;
             }
 
-            $this->updateBillingAddress($checkout, $billingAddressFormContainer, $layout);
+            $this->updateBillingAddress($checkout, $layout);
 
         } else {
             $checkout->setConfig([
@@ -115,7 +117,7 @@ class LayoutProcessor implements LayoutProcessorInterface
     }
 
     /**
-     * @param $checkout
+     * @param ComponentInterface $checkout
      */
     public function updateSidebar($checkout) {
         $summaryContainerData = [
@@ -143,7 +145,7 @@ class LayoutProcessor implements LayoutProcessorInterface
     }
 
     /**
-     * @param $checkout
+     * @param ComponentInterface $checkout
      * @return Component
      */
     public function createBillingAddressContainer($checkout) {
@@ -169,12 +171,12 @@ class LayoutProcessor implements LayoutProcessorInterface
     }
 
     /**
-     * @param $checkout
-     * @param $billingAddressFormContainer
-     * @param $layout
+     * @param ComponentInterface $checkout
+     * @param string $layout
      */
-    public function updateBillingAddress($checkout, $billingAddressFormContainer, $layout) {
+    public function updateBillingAddress($checkout, $layout) {
         if (!$this->checkoutDataHelper->isDisplayBillingOnPaymentMethodAvailable()) {
+            $billingAddressFormContainer = $this->createBillingAddressContainer($checkout);
             if ($this->helper->moveBillingOutsidePayment()) {
                 if ($layout === "onestep") {
                     $checkout->getNestedChild('steps.billing-step')->addChild($billingAddressFormContainer);
