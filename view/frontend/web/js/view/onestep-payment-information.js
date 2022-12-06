@@ -8,10 +8,11 @@ define([
     'jquery',
     'underscore',
     'uiRegistry',
+    'Magento_Checkout/js/model/quote',
     'Magento_Ui/js/lib/validation/validator',
     'Magento_Checkout/js/model/full-screen-loader',
     'Magento_Checkout/js/action/get-payment-information'
-], function ($, _, registry, validator, fullScreenLoader, getPaymentInformationAction) {
+], function ($, _, registry, quote, validator, fullScreenLoader, getPaymentInformationAction) {
     'use strict';
 
     var mixin = {
@@ -23,14 +24,39 @@ define([
                 if (!_.isUndefined(steps.hasSteps) && steps.hasSteps === false) {
                     self.triggerPaymentInformationUpdate();
                     registry.async('checkoutProvider')(function (checkoutProvider) {
-                        checkoutProvider.on('shippingAddress', function () {
-                            if (self.onestepShippingValidation()) {
+                        checkoutProvider.on('shippingAddress', function (addressData) {
+                            if (self.onestepShippingValidation(addressData)) {
                                 self.triggerPaymentInformationUpdate();
+                                self.enablePaymentMethods();
+                            } else {
+                                self.disablePaymentMethods();
                             }
                         });
                     });
                 }
             });
+        },
+
+        disablePaymentMethods: function() {
+            let paymentList = registry.get('checkout.steps.billing-step.payment.payments-list');
+            if (!_.isUndefined(paymentList)) {
+                _.each(paymentList.elems(), function (paymentMethod) {
+                    if (!_.isUndefined(paymentMethod.isPlaceOrderActionAllowed)) {
+                        paymentMethod.isPlaceOrderActionAllowed(false);
+                    }
+                });
+            }
+        },
+
+        enablePaymentMethods: function() {
+            let paymentList = registry.get('checkout.steps.billing-step.payment.payments-list');
+            if (!_.isUndefined(paymentList)) {
+                _.each(paymentList.elems(), function (paymentMethod) {
+                    if (!_.isUndefined(paymentMethod.isPlaceOrderActionAllowed)) {
+                        paymentMethod.isPlaceOrderActionAllowed(quote.billingAddress() != null);
+                    }
+                });
+            }
         },
 
         triggerPaymentInformationUpdate: function() {
@@ -42,30 +68,37 @@ define([
             });
         },
 
-        onestepShippingValidation: function () {
+        onestepShippingValidation: function (addressData) {
             let self = this;
             let result = true;
             _.each(registry.get('checkout.steps.shipping-step.shippingAddress.shipping-address-fieldset').elems(), function(field) {
-                if (!self.fieldValidation(field)) {
+                if (!self.fieldValidation(field, addressData)) {
                     result = false;
                 }
             });
             return result;
         },
 
-        fieldValidation: function (field) {
+        fieldValidation: function (field, addressData) {
             let self = this;
             if (!_.isUndefined(field.value)) {
                 if (!field.visible()) {
                     return true;
                 }
-                if (!validator(field.validation, field.value(), field.validationParams).passed) {
+                let fieldValue = null;
+                if (field.inputName.indexOf("[") !== -1) {
+                    let fieldNameParts = field.inputName.split("[");
+                    fieldValue = addressData[fieldNameParts[0]][fieldNameParts[1].replace("]", "")];
+                } else {
+                    fieldValue = addressData[field.inputName];
+                }
+                if (!validator(field.validation, fieldValue, field.validationParams).passed) {
                     return false;
                 }
             } else {
                 if (field.elems().length) {
                     _.each(field.elems(), function(childField) {
-                        if (self.fieldValidation(childField) === false) {
+                        if (self.fieldValidation(childField, addressData) === false) {
                             return false;
                         }
                     });

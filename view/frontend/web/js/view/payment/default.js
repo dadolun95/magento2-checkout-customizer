@@ -12,17 +12,52 @@ define([
 
     var mixin = {
 
-        /**
-         * @returns {*}
-         */
-        selectPaymentMethod: function () {
+        initialize: function() {
+            let self = this;
+            let result = this._super();
+            registry.get('checkout.steps', function (steps) {
+                if (!_.isUndefined(steps.hasSteps) && steps.hasSteps === false) {
+                    let shippingComponent = registry.get('checkout.steps.shipping-step.shippingAddress');
+                    let ShippingAddress = registry.get('checkoutProvider').shippingAddress;
+                    if (!shippingComponent.onestepShippingValidation(ShippingAddress)) {
+                        self.isPlaceOrderActionAllowed(false);
+                    }
+                }
+            });
+            return result;
+        },
+
+        placeOrder: function() {
             registry.get('checkout.steps', function (steps) {
                 if (!_.isUndefined(steps.hasSteps) && steps.hasSteps === false) {
                     let shippingComponent = registry.get('checkout.steps.shipping-step.shippingAddress');
                     shippingComponent.setShippingInformation();
+                    shippingComponent.validateShippingInformation();
                 }
             });
             return this._super();
+        },
+
+        /**
+         * @returns {*}
+         */
+        selectPaymentMethod: function () {
+            let result = false;
+            let self = this;
+            registry.get('checkout.steps', function (steps) {
+                if (!_.isUndefined(steps.hasSteps) && steps.hasSteps === false) {
+                    let shippingComponent = registry.get('checkout.steps.shipping-step.shippingAddress');
+                    shippingComponent.setShippingInformation();
+                    if (!shippingComponent.validateShippingInformation()) {
+                        self.isPlaceOrderActionAllowed(false);
+                    } else {
+                        result = self._super();
+                    }
+                } else {
+                    result = self._super();
+                }
+            });
+            return result;
         }
     };
 
