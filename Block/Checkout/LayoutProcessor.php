@@ -70,20 +70,24 @@ class LayoutProcessor implements LayoutProcessorInterface
      */
     public function process($jsLayout)
     {
+        /** @var ComponentInterface $checkout */
+        $checkout = $this->jsLayoutParser->parse($jsLayout, 'checkout');
+
         if ($this->helper->isCheckoutCustomizerEnabled()) {
 
-            /** @var ComponentInterface $checkout */
-            $checkout = $this->jsLayoutParser->parse($jsLayout, 'checkout');
-
+            $checkout->setConfig([
+                "checkoutCustomizerActive" => true
+            ]);
             $billingAddressFormContainer = $this->createBillingAddressContainer($checkout);
 
             $layout = $this->helper->getLayout();
             switch ($layout) {
-                case 'onestep':
+                case 'onestep_onecolumn':
                     $this->useOneStep($checkout);
-                    if ($this->helper->moveSidebarInsideCheckout()) {
-                        $this->updateSidebar($checkout);
-                    }
+                    break;
+                case 'onestep_twocolumns':
+                    $this->useOneStep($checkout);
+                    $this->updateSidebar($checkout);
                     break;
                 case 'twosteps':
                     $checkout->getChild('steps')->setConfig([
@@ -100,9 +104,13 @@ class LayoutProcessor implements LayoutProcessorInterface
 
             $this->updateBillingAddress($checkout, $billingAddressFormContainer, $layout);
 
-            $jsLayout['components']['checkout'] = $checkout->asArray();
+        } else {
+            $checkout->setConfig([
+                "checkoutCustomizerActive" => false
+            ]);
         }
 
+        $jsLayout['components']['checkout'] = $checkout->asArray();
         return $jsLayout;
     }
 

@@ -22,7 +22,8 @@ class Layout implements \Magento\Framework\Data\OptionSourceInterface
     {
         return [
             ['value' => 'twosteps', 'label' => __('Two steps (default)')],
-            ['value' => 'onestep', 'label' => __('One step')]
+            ['value' => 'onestep_onecolumn', 'label' => __('One step - One column')],
+            ['value' => 'onestep_twocolumns', 'label' => __('One step - Two columns')],
         ];
     }
 

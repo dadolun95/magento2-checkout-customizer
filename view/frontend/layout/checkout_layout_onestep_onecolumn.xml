@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Magento 2
+ * @package     Dadolun_Checkout
+ * @copyright   Copyright (c) 2022 Dadolun (https://github.com/dadolun95)
+ */
+-->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <attribute name="class" value="onestep-checkout-one-column"/>
+    </body>
+</page>

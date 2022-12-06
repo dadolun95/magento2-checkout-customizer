@@ -85,13 +85,6 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @return mixed
-     */
-    public function moveSidebarInsideCheckout() {
-        return $this->getConfigValue(self::CONFIG_PATH_GENERAL . self::MOVESIDEBAR_FIELD_PATH);
-    }
-
-    /**
      * @param $path
      * @param string $scope
      * @return mixed

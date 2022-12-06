@@ -59,13 +59,9 @@ class PreparePageLayout implements \Magento\Framework\Event\ObserverInterface
                     break;
             }
 
-            if ($this->helper->getLayout() === "onestep") {
-                $checkoutLayoutHandle = 'checkout_layout_onepage';
+            if ($this->helper->getLayout() && strpos($this->helper->getLayout(), "onestep") !== false) {
+                $checkoutLayoutHandle = 'checkout_layout_' . $this->helper->getLayout();
                 $layout->getUpdate()->addHandle($checkoutLayoutHandle);
-                if ($this->helper->moveSidebarInsideCheckout()) {
-                    $checkoutLayoutFullHandle = 'checkout_layout_onepage_full';
-                    $layout->getUpdate()->addHandle($checkoutLayoutFullHandle);
-                }
             }
         }
     }
