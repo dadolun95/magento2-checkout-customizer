@@ -84,14 +84,14 @@ class LayoutProcessor implements LayoutProcessorInterface
              */
             $layout = $this->helper->getLayout();
             switch ($layout) {
-                case 'onestep_onecolumn':
+                case Config::ONESTEPLAYOUT_ONECOLUMN:
                     $this->useOneStep($checkout);
                     break;
-                case 'onestep_twocolumns':
+                case Config::ONESTEPLAYOUT_TWOCOLUMNS:
                     $this->useOneStep($checkout);
                     $this->updateSidebar($checkout);
                     break;
-                case 'twosteps':
+                case Config::TWOSTEPLAYOUT:
                     $checkout->getChild('steps')->setConfig([
                         'hasSteps' => true
                     ]);
@@ -146,28 +146,31 @@ class LayoutProcessor implements LayoutProcessorInterface
 
     /**
      * @param ComponentInterface $checkout
-     * @return Component
+     * @return Component|false
      */
     public function createBillingAddressContainer($checkout) {
-        $checkout->getNestedChild('steps.billing-step.payment.afterMethods.billing-address-form')->setConfig([
-            'displayArea' => 'billingAddress'
-        ]);
-        $billingAddressFormContainerData = [
-            'component' => 'uiComponent',
-            'config' => [
-                'template' => 'Dadolun_Checkout/billing',
-                'options' => [],
+        if ($checkout->hasNestedChild('steps.billing-step.payment.afterMethods.billing-address-form')) {
+            $checkout->getNestedChild('steps.billing-step.payment.afterMethods.billing-address-form')->setConfig([
+                'displayArea' => 'billingAddress'
+            ]);
+            $billingAddressFormContainerData = [
+                'component' => 'uiComponent',
+                'config' => [
+                    'template' => 'Dadolun_Checkout/billing',
+                    'options' => [],
+                    'id' => 'billing-address-form-container'
+                ],
+                'dataScope' => '',
+                'label' => 'Billing Address Form Container',
+                'provider' => 'checkoutProvider',
+                'visible' => true,
+                'validation' => [],
+                'sortOrder' => 10,
                 'id' => 'billing-address-form-container'
-            ],
-            'dataScope' => '',
-            'label' => 'Billing Address Form Container',
-            'provider' => 'checkoutProvider',
-            'visible' => true,
-            'validation' => [],
-            'sortOrder' => 10,
-            'id' => 'billing-address-form-container'
-        ];
-        return $this->componentFactory->create(['componentName' => 'billing-address-form-container', 'data' => $billingAddressFormContainerData]);
+            ];
+            return $this->componentFactory->create(['componentName' => 'billing-address-form-container', 'data' => $billingAddressFormContainerData]);
+        }
+        return false;
     }
 
     /**
@@ -178,7 +181,7 @@ class LayoutProcessor implements LayoutProcessorInterface
         if (!$this->checkoutDataHelper->isDisplayBillingOnPaymentMethodAvailable()) {
             $billingAddressFormContainer = $this->createBillingAddressContainer($checkout);
             if ($this->helper->moveBillingOutsidePayment()) {
-                if ($layout === "onestep") {
+                if (in_array($layout, [Config::ONESTEPLAYOUT_ONECOLUMN, Config::ONESTEPLAYOUT_TWOCOLUMNS])) {
                     $checkout->getNestedChild('steps.billing-step')->addChild($billingAddressFormContainer);
                     $checkout->moveNestedChild('steps.billing-step.payment.afterMethods.billing-address-form', 'steps.billing-step.billing-address-form-container');
                     $checkout->getChild('steps')->setConfig([

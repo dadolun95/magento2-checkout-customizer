@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace Dadolun\Checkout\Model\Config\Source;
 
+use Dadolun\Checkout\Helper\Config;
+
 /**
  * Class Layout
  * @package Dadolun\Checkout\Model\Config\Source
@@ -21,9 +23,9 @@ class Layout implements \Magento\Framework\Data\OptionSourceInterface
     public function toOptionArray()
     {
         return [
-            ['value' => 'twosteps', 'label' => __('Two steps (default)')],
-            ['value' => 'onestep_onecolumn', 'label' => __('One step - One column')],
-            ['value' => 'onestep_twocolumns', 'label' => __('One step - Two columns')],
+            ['value' => Config::TWOSTEPLAYOUT, 'label' => __('Two steps (default)')],
+            ['value' => Config::ONESTEPLAYOUT_ONECOLUMN, 'label' => __('One step - One column')],
+            ['value' => Config::ONESTEPLAYOUT_TWOCOLUMNS, 'label' => __('One step - Two columns')],
         ];
     }
 

@@ -17,6 +17,11 @@ use Magento\Store\Model\ScopeInterface;
  */
 class Config extends \Magento\Framework\App\Helper\AbstractHelper
 {
+
+    const ONESTEPLAYOUT_ONECOLUMN = "onestep_onecolumn";
+    const ONESTEPLAYOUT_TWOCOLUMNS = "onestep_twocolumns";
+    const TWOSTEPLAYOUT = "twosteps";
+
     /**
      * @var string
      */
@@ -40,17 +45,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @var string
      */
-    const SHOWSIDEBAR_FIELD_PATH = '/show_sidebar';
-
-    /**
-     * @var string
-     */
     const MOVEBILLING_FIELD_PATH = '/move_billing_outside_payment';
-
-    /**
-     * @var string
-     */
-    const MOVESIDEBAR_FIELD_PATH = '/move_sidebar_inside_checkout';
 
 
     /**
