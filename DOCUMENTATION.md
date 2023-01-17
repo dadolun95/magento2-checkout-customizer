@@ -59,6 +59,7 @@ The watcher object needs 3 parameters:
 - form specification 'shipping-address-form' or 'billing-address-form'
 - field specification 'firstname', 'lastname', ...
 - an instructions object, where the 'value' property is the matching value that can be a string, an array, regex, ... (see field-watcher.js file)
+
 If billing address is specified on watcher and Magento is configured to use billing address inside payment method you also need to specify the payment method before the field:
 ```
 ...
@@ -136,6 +137,7 @@ You can call quote-watcher passing the element you want observe:
 - shipping-method
 - payment-method
 - totals
+
 Then write the callback after the tracked change.
 The third parameter specifies if you want to receive the entire updated quote also as parameter of your callback function.
 
