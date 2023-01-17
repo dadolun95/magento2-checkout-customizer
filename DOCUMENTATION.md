@@ -143,7 +143,7 @@ The third parameter specifies if you want to receive the entire updated quote al
 ```
 define([
     'Dadolun_Checkout/js/utils/hook-register',
-], function (quoteWatcher) {
+], function (hook) {
     hook('place-order', 'before', function (params) {
         // DO SOMETHING AMAZING!
     });
@@ -170,7 +170,7 @@ You can call hook-register passing the action you want to mix:
 - set-payment-information
 - set-shipping-information
 - update-shopping-cart
+
 Then as second parameter specify if you want to run "before" or "after" the action execution.
 Remember that "before" method can change input parameters and "after" method can change output result of the action (if have some).
 As third parameter specify the callback fired on every action execution.
-NB: consider to 
