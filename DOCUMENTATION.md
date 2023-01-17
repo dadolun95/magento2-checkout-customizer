@@ -106,4 +106,71 @@ define([
     );
 }
 ```
-That's all for now... other improvements are coming! Stay tuned!
+
+### Dadolun_Checkout/js/utils/quote-watcher
+```
+define([
+    'Dadolun_Checkout/js/utils/quote-watcher',
+], function (quoteWatcher) {
+    quoteWatcher(
+        'billing-address',
+        function(quote, data) {
+            console.log(data);
+        },
+        true
+    );
+    quoteWatcher(
+        'billing-address',
+        function(data) {
+            console.log(data);
+        },
+        false
+    );
+}
+```
+As you can see above, quote-watcher observe every quote element change.
+This feature is amazing when you need to make updates on checkout sections based on address, totals, payment or shipping method changes.
+You can call quote-watcher passing the element you want observe:
+- billing-address
+- shipping-address
+- shipping-method
+- payment-method
+- totals
+Then write the callback after the tracked change.
+The third parameter specifies if you want to receive the entire updated quote also as parameter of your callback function.
+
+### Dadolun_Checkout/js/utils/hook-register
+```
+define([
+    'Dadolun_Checkout/js/utils/hook-register',
+], function (quoteWatcher) {
+    hook('place-order', 'before', function (params) {
+        // DO SOMETHING AMAZING!
+    });
+    hook('select-billing-address', 'after', function (params) {
+        // DO SOMETHING AMAZING!
+    });
+}
+```
+As you can see above, hook-register let you describing new behaviors "before" and "after" every checkout action.
+In particular this util is a magento2's requireJs mixins wrapper which simplifies the way you write code working before and after the checkout action uiComponents.
+You can call hook-register passing the action you want to mix:
+- create-billing-address
+- create-shipping-address
+- get-payment-action
+- get-totals
+- place-order-action
+- recollect-shipping-rates
+- redirect-on-success
+- select-billing-address
+- select-payment-method
+- select-shipping-address
+- select-shipping-method
+- set-billing-address
+- set-payment-information
+- set-shipping-information
+- update-shopping-cart
+Then as second parameter specify if you want to run "before" or "after" the action execution.
+Remember that "before" method can change input parameters and "after" method can change output result of the action (if have some).
+As third parameter specify the callback fired on every action execution.
+NB: consider to 

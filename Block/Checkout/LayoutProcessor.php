@@ -1,8 +1,8 @@
 <?php
 /**
+ * @category    Magento 2
  * @package     Dadolun_Checkout
- * @copyright   Copyright (c) 2022 Dadolun (https://github.com/dadolun95)
- * @license     Open Source License
+ * @copyright   Copyright (c) 2023 Dadolun (https://www.dadolun.com)
  */
 
 declare(strict_types=1);
@@ -118,6 +118,7 @@ class LayoutProcessor implements LayoutProcessorInterface
 
     /**
      * @param ComponentInterface $checkout
+     * @throws LocalizedException
      */
     public function updateSidebar($checkout) {
         $summaryContainerData = [
@@ -176,6 +177,7 @@ class LayoutProcessor implements LayoutProcessorInterface
     /**
      * @param ComponentInterface $checkout
      * @param string $layout
+     * @throws LocalizedException
      */
     public function updateBillingAddress($checkout, $layout) {
         if (!$this->checkoutDataHelper->isDisplayBillingOnPaymentMethodAvailable()) {

@@ -1,7 +1,7 @@
 /**
  * @category    Magento 2
  * @package     Dadolun_Checkout
- * @copyright   Copyright (c) 2022 Dadolun (https://github.com/dadolun95)
+ * @copyright   Copyright (c) 2023 Dadolun (https://www.dadolun.com)
  */
 
 define([

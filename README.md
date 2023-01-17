@@ -26,6 +26,7 @@ composer require dadolun95/magento2-checkout-customizer
 Then you'll need to enable the module and update your database:
 ```
 php bin/magento module:enable Dadolun_Checkout
+composer require pragmatic-modules/magento2-module-jslayout-parser
 php bin/magento setup:upgrade
 php bin/magento setup:di:compile
 ```
