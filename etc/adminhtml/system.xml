@@ -10,7 +10,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="dadolun" translate="label" sortOrder="10">
+        <tab id="dadolun" translate="label" sortOrder="50">
             <label>Dadolun</label>
         </tab>
         <section id="dadolun_checkout" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">

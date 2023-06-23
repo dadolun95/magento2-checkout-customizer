@@ -11,22 +11,13 @@
 You can install this module adding it on app/code folder or with composer.
 
 ##### COMPOSER
-###### VCS 
-Specify VCS type nodes on composer repositories section:
-```
-{
-    "type": "vcs",
-    "url":  "git@github.com:dadolun95/magento2-checkout-customizer"
-},
-```
 ```
 composer require dadolun95/magento2-checkout-customizer
 ```
 ##### MAGENTO
 Then you'll need to enable the module and update your database:
 ```
-php bin/magento module:enable Dadolun_Checkout
-composer require pragmatic-modules/magento2-module-jslayout-parser
+php bin/magento module:enable Dadolun_Checkout Pragmatic_JsLayoutParser
 php bin/magento setup:upgrade
 php bin/magento setup:di:compile
 ```
