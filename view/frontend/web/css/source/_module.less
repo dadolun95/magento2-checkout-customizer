@@ -32,16 +32,24 @@
         }
 
         &.onestep-checkout-one-column,
-        &.onestep-checkout-two-columns {
+        &.onestep-checkout-two-columns,
+        &.onestep-checkout-three-columns {
             #checkout {
                 #checkoutSteps {
                     display: grid;
 
                     #shipping {
+                        grid-area: shipping-address;
                         order: 1;
                     }
 
+                    #billing {
+                        grid-area: billing-address;
+                        order: 3;
+                    }
+
                     #opc-shipping_method {
+                        grid-area: shipping-method;
                         order: 2;
 
                         .actions-toolbar {
@@ -49,11 +57,13 @@
                         }
                     }
 
-                    #billing {
-                        order: 3;
+                    #payment {
+                        grid-area: payment-method;
+                        order: 5;
                     }
 
                     #summary {
+                        grid-area: summary;
                         order: 4;
 
                         .opc-block-summary {
@@ -66,10 +76,6 @@
                                 padding: @indent__m;
                             }
                         }
-                    }
-
-                    #payment {
-                        order: 5;
                     }
                 }
             }
@@ -87,37 +93,33 @@
 
                 #checkoutSteps {
                     grid-template-areas: "shipping-address shipping-method" "shipping-address payment-method" "shipping-address summary" "billing-address . ";
-                    grid-template-columns: 1fr 1fr;
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
                     grid-column-gap: @indent__m;
-
-                    #shipping {
-                        grid-area: shipping-address;
-                    }
-
-                    #billing {
-                        grid-area: billing-address;
-                    }
-
-                    #opc-shipping_method {
-                        grid-area: shipping-method;
-                    }
-
-                    #payment {
-                        grid-area: payment-method;
-                    }
-
-                    #summary {
-                        grid-area: summary;
-                    }
                 }
             }
         }
+
+        &.onestep-checkout-three-columns {
+            #checkout {
+                .opc-wrapper {
+                    width: 100%;
+                }
+
+                #checkoutSteps {
+                    grid-template-areas: "shipping-address shipping-method summary" "shipping-address payment-method summary" "billing-address . . ";
+                    grid-template-columns: repeat(3, minmax(0, 1fr));
+                    grid-column-gap: @indent__m;
+                }
+            }
+        }
+
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__l) {
     .checkout-index-index {
-        &.onestep-checkout-two-columns {
+        &.onestep-checkout-two-columns,
+        &.onestep-checkout-three-columns {
             .opc-wrapper {
                 width: unset;
             }

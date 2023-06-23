@@ -3,8 +3,8 @@
 ### Dadolun_Checkout
 
 ## Features
-- Customize Magento checkout page choosing from onestep vs twostep (Magento default)
-- Customize billing address position. You can choose to place it under shipping address and also under and inside payment methods (Magento default)
+- Customization of the checkout page, choosing between the two step layout (Magento default) and the one step layout. In the case of the one step, you can choose between 1 column, 2 columns or 3 columns.
+- Customization of billing address position. You can choose to place it inside or outside the payment methods (Magento default), in case of outside position you can additionaly move it in a separated section like shipping address.
 - Add Js utilities for shipping and billing address inputs manipulation.
 
 ## Installation

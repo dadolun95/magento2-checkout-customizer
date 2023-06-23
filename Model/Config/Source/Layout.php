@@ -26,6 +26,7 @@ class Layout implements \Magento\Framework\Data\OptionSourceInterface
             ['value' => Config::TWOSTEPLAYOUT, 'label' => __('Two steps (default)')],
             ['value' => Config::ONESTEPLAYOUT_ONECOLUMN, 'label' => __('One step - One column')],
             ['value' => Config::ONESTEPLAYOUT_TWOCOLUMNS, 'label' => __('One step - Two columns')],
+            ['value' => Config::ONESTEPLAYOUT_THREECOLUMNS, 'label' => __('One step - Three columns')],
         ];
     }
 

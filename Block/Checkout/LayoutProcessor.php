@@ -88,6 +88,7 @@ class LayoutProcessor implements LayoutProcessorInterface
                     $this->useOneStep($checkout);
                     break;
                 case Config::ONESTEPLAYOUT_TWOCOLUMNS:
+                case Config::ONESTEPLAYOUT_THREECOLUMNS:
                     $this->useOneStep($checkout);
                     $this->updateSidebar($checkout);
                     break;
@@ -183,7 +184,7 @@ class LayoutProcessor implements LayoutProcessorInterface
         if (!$this->checkoutDataHelper->isDisplayBillingOnPaymentMethodAvailable()) {
             $billingAddressFormContainer = $this->createBillingAddressContainer($checkout);
             if ($this->helper->moveBillingOutsidePayment()) {
-                if (in_array($layout, [Config::ONESTEPLAYOUT_ONECOLUMN, Config::ONESTEPLAYOUT_TWOCOLUMNS])) {
+                if (in_array($layout, [Config::ONESTEPLAYOUT_ONECOLUMN, Config::ONESTEPLAYOUT_TWOCOLUMNS, Config::ONESTEPLAYOUT_THREECOLUMNS])) {
                     $checkout->getNestedChild('steps.billing-step')->addChild($billingAddressFormContainer);
                     $checkout->moveNestedChild('steps.billing-step.payment.afterMethods.billing-address-form', 'steps.billing-step.billing-address-form-container');
                     $checkout->getChild('steps')->setConfig([

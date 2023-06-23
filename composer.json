@@ -2,7 +2,7 @@
     "name": "dadolun95/magento2-checkout-customizer",
     "description": "Magento2 Checkout Customizer Module",
     "type": "magento2-module",
-    "version": "1.0.4",
+    "version": "1.1.0",
     "require": {
         "magento/framework": "^102.0|^103.0",
         "pragmatic-modules/magento2-module-jslayout-parser": "*"

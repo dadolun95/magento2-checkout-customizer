@@ -20,6 +20,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
 
     const ONESTEPLAYOUT_ONECOLUMN = "onestep_onecolumn";
     const ONESTEPLAYOUT_TWOCOLUMNS = "onestep_twocolumns";
+    const ONESTEPLAYOUT_THREECOLUMNS = "onestep_threecolumns";
     const TWOSTEPLAYOUT = "twosteps";
 
     /**
